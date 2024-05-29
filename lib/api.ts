@@ -42,7 +42,7 @@ async function fetchGraphQL(query: string, preview = false): Promise<any> {
         }`,
       },
       body: JSON.stringify({ query }),
-      next: { tags: ["posts"] },
+      // next: { tags: ["posts"] },
     },
   ).then((response) => response.json());
 }
@@ -117,4 +117,32 @@ export async function getPostAndMorePosts(
     post: extractPost(entry),
     morePosts: extractPostEntries(entries),
   };
+}
+type Item = {
+  name: string;
+  year: string;
+  text: string;
+  image: {
+    url: string;
+    title: string;
+  };
+};
+
+export async function getAllItems(): Promise<Item[]> {
+  const entries = await fetchGraphQL(
+    `query {
+      itemCollection {
+        items {
+          name
+          year
+          text
+          image {
+            url
+            title
+          }
+        }
+      }
+    }`,
+  );
+  return entries?.data?.itemCollection?.items;
 }

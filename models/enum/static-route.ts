@@ -1,0 +1,20 @@
+export enum StaticRoute {
+  Cart = '/checkout/cart',
+  CheckoutLogin = '/checkout/login',
+  CheckoutAddresses = '/checkout/addresses',
+  CheckoutDelivery = '/checkout/delivery',
+  CheckoutAppointment = '/checkout/appointment',
+  CheckoutPayment = '/checkout/payment',
+  CheckoutReview = '/checkout/review',
+  CheckoutExpertInquiries = '/checkout/expert-inquiries',
+  OrderConfirmation = '/order-confirmation',
+  Registration = '/registration',
+  RegistrationConfirmation = '/registration-confirmation',
+  Search = '/search',
+  StoreFinder = '/store-finder',
+  Comparison = '/comparison',
+  Bookmarks = '/bookmarks',
+  Account = '/account/profile',
+  OrderHistory = '/account/order-history',
+  NewsletterSignUP = '/newsletter', // TODO: maintain correct link
+}
