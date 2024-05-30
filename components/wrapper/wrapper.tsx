@@ -13,19 +13,28 @@ import { richTextFromMarkdown } from '@contentful/rich-text-from-markdown';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import { TypographyStylesProvider } from '@mantine/core';
 import { DragDropContext, DropResult, Droppable } from "@hello-pangea/dnd";
+import { handleAction } from "@/utils/action.utils";
+import { updateColumnId } from "@/actions/database.actions";
+import { useMutation } from "@tanstack/react-query";
 
 type Properties = {
   items: Item[]
 }
 
 const mapColumns = (items: Item[]) => {
+  const backlogItems = items.filter(item => item.columnId === 'backlog');
   return items.reduce((acc, item) => {
-    acc[item.year.toString()] = {
-      items: [],
-      title: item.year.toString()
+    if (!acc[item.year.toString()]) {
+      acc[item.year.toString()] = {
+        items: [],
+        title: item.year.toString()
+      };
     }
-    return acc
-  }, { backlog: { items: items, title: 'Backlog' } } as Record<string, { items: Item[]; title: string; }>)
+    if (item.columnId !== 'backlog') {
+      acc[item.year.toString()].items.push(item);
+    }
+    return acc;
+  }, { backlog: { items: backlogItems, title: 'Stapel' } } as Record<string, { items: Item[]; title: string; }>);
 }
 
 export default function Wrapper ({ items }: Properties) {
@@ -37,6 +46,15 @@ export default function Wrapper ({ items }: Properties) {
   const [started, setStarted] = useState(false)
 
   const [columns, setColumns] = useState(mapColumns(items));
+
+  const updateColumnMutation = useMutation({
+    mutationFn: async (data: { id: string, columnId: string }) => {
+      return handleAction(await updateColumnId(data.id, data.columnId));
+    },
+    onError: (error) => {
+      console.log('error', error)
+    },
+  });
 
   // console.log('columns', columns)
 
@@ -65,7 +83,7 @@ export default function Wrapper ({ items }: Properties) {
     setStarted(true)
   }, [started])
 
-  const onDragEnd = useCallback((result: DropResult) => {
+  const onDragEnd = useCallback(async(result: DropResult) => {
     if (!result.destination) {
       return;
     }
@@ -88,6 +106,7 @@ export default function Wrapper ({ items }: Properties) {
           items: destItems,
         },
       });
+      updateColumnMutation.mutate({ id: removed.id, columnId: destination.droppableId })
     } else {
       const column = columns[source.droppableId];
       const copiedItems = [...column.items];
