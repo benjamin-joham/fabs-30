@@ -1,0 +1,13 @@
+.home-page {
+
+  &__page-title {
+    display: flex;
+    justify-content: center;
+    color: var(--mantine-primary-color-filled);
+    padding-block: 20px;
+  }
+
+  &__page-description {
+    padding-inline: 20px;
+  }
+}

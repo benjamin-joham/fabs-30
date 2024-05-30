@@ -72,6 +72,17 @@ function getMappedSizes(sizes: ImageSizes): string {
   );
 }
 
+type ContentfulImageProps  ={
+  src: string;
+  width?: number;
+  quality?: number;
+  [key: string]: any; // For other props that might be passed
+}
+
+const contentfulLoader = ({ src, width, quality }: ContentfulImageProps) => {
+  return `${src}?w=${width}&q=${quality || 75}`;
+};
+
 export default function CustomImage({
   imageSizes,
   aspectRatio,
@@ -104,6 +115,7 @@ export default function CustomImage({
           width={rest.fill ? undefined : rest.width || largestImageWidth}
           height={rest.fill ? undefined : rest.height || largestImageHeight}
           {...rest}
+          loader={contentfulLoader}
           alt={rest.alt || ''}
         />
       )}

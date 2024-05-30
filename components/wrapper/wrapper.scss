@@ -1,4 +1,28 @@
 .wrapper {
+
+  margin: 8px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  // width: 100%;
+  // min-height: 80vh;
+
+
+  &__task-list {
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    background: #f3f3f3;
+    min-width: 341px;
+    border-radius: 5px;
+    padding: 15px 15px;
+
+    &:first-of-type {
+      grid-column: 1 / 4;
+      flex-direction: row;
+    }
+  }
+
   &__information {
   height: 100%;
   // text-align: center;
@@ -23,6 +47,7 @@
 .mantine-Modal-body {
   height: 600px !important;
   display: flex;
-  justify-self: center;
+  // justify-self: center;
   flex-direction: column;
+  justify-content: space-between;
 }

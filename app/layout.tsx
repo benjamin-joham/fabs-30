@@ -1,23 +1,23 @@
-import "./globals.css";
 import "@mantine/core/styles.css";
-import { Inter } from "next/font/google";
 import { EXAMPLE_PATH, CMS_NAME } from "@/lib/constants";
-import { MantineProvider, ColorSchemeScript, Button } from "@mantine/core";
-import { ContextModalProps, ModalsProvider } from '@mantine/modals';
+import { MantineProvider } from "@mantine/core";
+import { ModalsProvider } from '@mantine/modals';
 import { theme } from "../theme";
-import { Item } from "@/lib/api";
+import { Open_Sans } from 'next/font/google'
+import { useBem } from "@/hooks/bem";
+import '@/setup/styles.scss';
+import './layout.scss';
+import CustomDrawer from "@/components/drawer/drawer";
 
 export const metadata = {
-  title: `Next.js and ${CMS_NAME} Example`,
-  description: `This is a blog built with Next.js and ${CMS_NAME}.`,
+  title: `Fabs 30. Geburtstag`,
+  description: 'Timeline zum 30. Geburtstag von Fabian',
 };
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap",
-});
-
+const openSans = Open_Sans({
+  subsets: ['latin'],
+  display: 'swap',
+})
 function Footer() {
   return (
     <footer className="bg-accent-1 border-t border-accent-2">
@@ -46,38 +46,20 @@ function Footer() {
   );
 }
 
-// const Modal = ({
-//   context,
-//   id,
-//   innerProps
-// }: ContextModalProps<{
-//   item: Item;
-// }>) => {
-//   return (
-//     <div>
-//       <h1>{innerProps.item.name}</h1>
-//       <p>{innerProps.item.text}</p>
-//       <Button fullWidth mt="md" onClick={() => context.closeModal(id)}>
-//         Close modal
-//       </Button>
-//     </div>
-//   );
-// }
-
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const b = useBem('RootLayout');
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="de" className={openSans.className}>
       <body>
       <MantineProvider theme={theme}>
         <ModalsProvider>
-          <section className="min-h-screen">
-            <main>{children}</main>
-            {/* <Footer /> */}
-          </section>
+          <CustomDrawer />
+          <main className={b('')}>{children}</main>
+          {/* <Footer /> */}
         </ModalsProvider>
       </MantineProvider>
       </body>

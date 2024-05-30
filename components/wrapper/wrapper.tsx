@@ -2,7 +2,7 @@
 
 import { Button, Modal, Text, Title } from "@mantine/core";
 import { useDisclosure } from '@mantine/hooks';
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import FlipCard from "../flip-card/flip-card";
 import { Item } from "@/lib/api";
 import ReactCardFlip from "react-card-flip";
@@ -12,10 +12,22 @@ import './wrapper.scss';
 import { richTextFromMarkdown } from '@contentful/rich-text-from-markdown';
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer';
 import { TypographyStylesProvider } from '@mantine/core';
+import { DragDropContext, DropResult, Droppable } from "@hello-pangea/dnd";
 
 type Properties = {
   items: Item[]
 }
+
+const mapColumns = (items: Item[]) => {
+  return items.reduce((acc, item) => {
+    acc[item.year.toString()] = {
+      items: [],
+      title: item.year.toString()
+    }
+    return acc
+  }, { backlog: { items: items, title: 'Backlog' } } as Record<string, { items: Item[]; title: string; }>)
+}
+
 export default function Wrapper ({ items }: Properties) {
   const b = useBem('Wrapper');
   const [opened, { open, close }] = useDisclosure(false);
@@ -23,14 +35,18 @@ export default function Wrapper ({ items }: Properties) {
   const [isFlipped, setIsFlipped] = useState(false);
   const [transformedText, setTransformedText] = useState<string | undefined>(undefined)
 
+  const [columns, setColumns] = useState(mapColumns(items));
+
+  // console.log('columns', columns)
+
   useEffect(() => {
-    console.log('modal item changed', selectedItem)
+    // console.log('modal item changed', selectedItem)
     void markdownToHtml()
   }, [selectedItem])
 
   const handleFlipClick = () => {
     setIsFlipped(!isFlipped)
-    console.log('clicked and flipped', isFlipped)
+    // console.log('clicked and flipped', isFlipped)
   }
 
   const markdownToHtml = async () => {
@@ -44,19 +60,106 @@ export default function Wrapper ({ items }: Properties) {
     setIsFlipped(false)
   }
 
+  const onDragEnd = useCallback((result: DropResult) => {
+    if (!result.destination) {
+      return;
+    }
+    const { source, destination } = result;
+    if (source.droppableId !== destination.droppableId) {
+      const sourceColumn = columns[source.droppableId];
+      const destColumn = columns[destination.droppableId];
+      const sourceItems = [...sourceColumn.items];
+      const destItems = [...destColumn.items];
+      const [removed] = sourceItems.splice(source.index, 1);
+      destItems.splice(destination.index, 0, removed);
+      setColumns({
+        ...columns,
+        [source.droppableId]: {
+          ...sourceColumn,
+          items: sourceItems,
+        },
+        [destination.droppableId]: {
+          ...destColumn,
+          items: destItems,
+        },
+      });
+    } else {
+      const column = columns[source.droppableId];
+      const copiedItems = [...column.items];
+      const [removed] = copiedItems.splice(source.index, 1);
+      copiedItems.splice(destination.index, 0, removed);
+      setColumns({
+        ...columns,
+        [source.droppableId]: {
+          ...column,
+          items: copiedItems,
+        },
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [[columns, setColumns]]);
+
+  const onDragStart = () => {
+    if (window.navigator.vibrate) {
+      window.navigator.vibrate(100);
+    }
+  }
+
   return (
     <>
-    {items.map((item) => {
+    <div className={b('page-description')}>
+      <Text size={'md'}>Hallo Fabian 😉</Text>
+      <Text size={'md'}>Das ist deine Chance zu beweisen, dass du dein Leben korrekt ordnen kannst.</Text>
+      <Text size={'md'}>Klicke auf den Start Button um los zu legen.</Text>
+      <Button onClick={() => console.log('clicked')}>Start</Button>
+    </div>
+    <DragDropContext
+      onDragEnd={onDragEnd}
+      onDragStart={onDragStart}
+
+    >
+      <div className={b()}>
+          {Object.entries(columns).sort((a, b) => b[0].localeCompare(a[0])).map(([columnId, column], index) => {
+            return (
+              <Droppable key={columnId} droppableId={columnId} direction={columnId === 'backlog' ? 'horizontal' : 'vertical'}>
+                {(provided, snapshot) => (
+                  <div className={b('task-list')}
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                  >
+                    <Title order={2} className={b('title')}>{column.title}</Title>
+                    {/* {column.items.length} */}
+                    {column.items.map((item, index) => (
+                      <FlipCard
+                      item={item}
+                      key={item.name}
+                      index={index}
+                      onClick={open}
+                      setItem={setSelectedItem}
+                      {...(columnId === 'backlog' && {className: 'initial'})}
+                    />
+                      // <TaskCard key={item.name} item={item as Item} index={index} />
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            );
+          })}
+      </div>
+    </DragDropContext>
+    {/* {items.map((item, index) => {
         // console.log('item', item)
         return (
           <FlipCard
             item={item}
             key={item.name}
+            index={index}
             onClick={open}
             setItem={setSelectedItem}
           />
         )
-      })}
+      })} */}
     <Modal opened={opened} onClose={onClose} size={"lg"} className={b('modal')}>
       <ReactCardFlip isFlipped={isFlipped}>
           <div key="front">

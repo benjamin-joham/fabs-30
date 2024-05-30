@@ -9,12 +9,12 @@ import Wrapper from "@/components/wrapper/wrapper";
 
 export default async function TestPage() {
   const b = useBem('TestPage');
-  const items = await getAllItems();
+  // const items = await getAllItems();
 
   return (
     <div className={b()}>
       <Title className={b('title')}>Test Page</Title>
-      <Wrapper items={items} />
+      <Wrapper items={[]} />
     </div>
   );
 }
