@@ -8,6 +8,7 @@ import { useBem } from "@/hooks/bem";
 import '@/setup/styles.scss';
 import './layout.scss';
 import CustomDrawer from "@/components/drawer/drawer";
+import GlobalProvider from "@/context/global-provider";
 
 export const metadata = {
   title: `Fabs 30. Geburtstag`,
@@ -55,13 +56,12 @@ export default function RootLayout({
   return (
     <html lang="de" className={openSans.className}>
       <body>
-      <MantineProvider theme={theme}>
-        <ModalsProvider>
+        <GlobalProvider>
+
           <CustomDrawer />
           <main className={b('')}>{children}</main>
           {/* <Footer /> */}
-        </ModalsProvider>
-      </MantineProvider>
+        </GlobalProvider>
       </body>
     </html>
   );

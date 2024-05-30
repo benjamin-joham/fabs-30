@@ -3,10 +3,32 @@ import { useDisclosure } from '@mantine/hooks';
 import { Drawer, Button, List } from '@mantine/core';
 import { useBem } from '@/hooks/bem';
 import './drawer.scss'
+import { useMutation } from '@tanstack/react-query';
+import { handleAction } from '@/utils/action.utils';
+import { fetchPosts } from '@/actions/contentful.action';
+import { resetDatabase } from '@/actions/database.actions';
 
 export default function CustomDrawer() {
   const b = useBem('CustomDrawer')
   const [opened, { open, close }] = useDisclosure(false);
+
+  const fetchPostsMutation = useMutation({
+    mutationFn: async () => {
+      return handleAction(await fetchPosts());
+    },
+    onError: (error) => {
+      console.log('error', error)
+    },
+  });
+
+  const resetDatabaseMutation = useMutation({
+    mutationFn: async () => {
+      return handleAction(await resetDatabase());
+    },
+    onError: (error) => {
+      console.log('error', error)
+    },
+  });
 
   return (
     <>
@@ -18,8 +40,12 @@ export default function CustomDrawer() {
       >
         {/* Drawer content */}
         <List>
-          <List.Item>Update Posts from Contentful</List.Item>
-          <List.Item>Reset Database</List.Item>
+          <List.Item onClick={() => fetchPostsMutation.mutate()}>Update Posts from Contentful</List.Item>
+          {fetchPostsMutation.isPending && <div>Fetching posts...</div>}
+          {fetchPostsMutation.isSuccess && <div>Successfully updated Posts!</div>}
+          <List.Item onClick={() => resetDatabaseMutation.mutate()}>Reset Database</List.Item>
+          {resetDatabaseMutation.isPending && <div>Deleting posts...</div>}
+          {resetDatabaseMutation.isSuccess && <div>Successfully reset Database!</div>}
         </List>
       </Drawer>
 

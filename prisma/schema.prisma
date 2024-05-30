@@ -11,14 +11,18 @@ datasource db {
 }
 
 model Image {
-  title   String   @id
-  url     String   @unique
+  id    String @id
+  title String
+  url   String @unique
+  Post  Post?
 }
 
 model Post {
-  name    String   @id
-  year    Int
-  text    String
-  image   Image @relation(fields: [imageTitle], references: [title])
-  imageTitle String
+  id       String @id
+  name     String @unique
+  year     String
+  text     String
+  image    Image  @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  imageId  String @unique
+  columnId String
 }

@@ -1,3 +1,5 @@
+import 'server-only';
+
 const POST_GRAPHQL_FIELDS = `
   slug
   title
@@ -28,7 +30,7 @@ const POST_GRAPHQL_FIELDS = `
   }
 `;
 
-async function fetchGraphQL(query: string, preview = false): Promise<any> {
+export async function fetchGraphQL(query: string, preview = false): Promise<any> {
   return fetch(
     `https://graphql.contentful.com/content/v1/spaces/${process.env.CONTENTFUL_SPACE_ID}`,
     {
@@ -119,13 +121,17 @@ export async function getPostAndMorePosts(
   };
 }
 export type Item = {
+  id: string;
   name: string;
-  year: string;
+  year: number;
   text: string;
   image: {
+    id: string;
     url: string;
     title: string;
   };
+  imageId: string;
+  columnId: string;
 };
 
 export async function getAllItems(): Promise<Item[]> {
@@ -144,5 +150,6 @@ export async function getAllItems(): Promise<Item[]> {
       }
     }`,
   );
+
   return entries?.data?.itemCollection?.items;
 }
