@@ -4,7 +4,8 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "setup": "node ./lib/setup.js"
+    "setup": "node ./lib/setup.js",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@contentful/rich-text-from-markdown": "^15.17.3",
