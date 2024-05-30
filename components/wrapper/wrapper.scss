@@ -7,6 +7,14 @@
   // width: 100%;
   // min-height: 80vh;
 
+  &__page-description {
+    padding-inline: 20px;
+
+    &--hide {
+      display: none;
+    }
+  }
+
 
   &__task-list {
     min-height: 100px;
@@ -20,6 +28,13 @@
     &:first-of-type {
       grid-column: 1 / 4;
       flex-direction: row;
+    }
+  }
+
+  &__context {
+    display: none;
+    &--show {
+      display: block;
     }
   }
 

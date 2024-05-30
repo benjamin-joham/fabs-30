@@ -34,6 +34,7 @@ export default function Wrapper ({ items }: Properties) {
   const [selectedItem, setSelectedItem] = useState<Item | undefined>(undefined);
   const [isFlipped, setIsFlipped] = useState(false);
   const [transformedText, setTransformedText] = useState<string | undefined>(undefined)
+  const [started, setStarted] = useState(false)
 
   const [columns, setColumns] = useState(mapColumns(items));
 
@@ -59,6 +60,10 @@ export default function Wrapper ({ items }: Properties) {
     close()
     setIsFlipped(false)
   }
+
+  const handleStartClick = useCallback(() => {
+    setStarted(true)
+  }, [started])
 
   const onDragEnd = useCallback((result: DropResult) => {
     if (!result.destination) {
@@ -107,16 +112,16 @@ export default function Wrapper ({ items }: Properties) {
 
   return (
     <>
-    <div className={b('page-description')}>
+    <div className={b('page-description', { hide: started })}>
       <Text size={'md'}>Hallo Fabian 😉</Text>
       <Text size={'md'}>Das ist deine Chance zu beweisen, dass du dein Leben korrekt ordnen kannst.</Text>
       <Text size={'md'}>Klicke auf den Start Button um los zu legen.</Text>
-      <Button onClick={() => console.log('clicked')}>Start</Button>
+      <Button onClick={handleStartClick}>Start</Button>
     </div>
+    <div className={b('context', { show: started })}>
     <DragDropContext
       onDragEnd={onDragEnd}
       onDragStart={onDragStart}
-
     >
       <div className={b()}>
           {Object.entries(columns).sort((a, b) => b[0].localeCompare(a[0])).map(([columnId, column], index) => {
@@ -148,6 +153,7 @@ export default function Wrapper ({ items }: Properties) {
           })}
       </div>
     </DragDropContext>
+    </div>
     {/* {items.map((item, index) => {
         // console.log('item', item)
         return (
