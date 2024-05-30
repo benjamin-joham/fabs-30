@@ -30,6 +30,7 @@ export const fetchPosts = contentfulAction(async (): Promise<void> => {
           ...item,
           year: item.year.toString(),
           id: postId,
+          imageId: undefined,
           image: {
             create: {
               id: imageId,
