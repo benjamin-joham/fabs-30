@@ -1,6 +1,11 @@
 import "./globals.css";
+import "@mantine/core/styles.css";
 import { Inter } from "next/font/google";
 import { EXAMPLE_PATH, CMS_NAME } from "@/lib/constants";
+import { MantineProvider, ColorSchemeScript, Button } from "@mantine/core";
+import { ContextModalProps, ModalsProvider } from '@mantine/modals';
+import { theme } from "../theme";
+import { Item } from "@/lib/api";
 
 export const metadata = {
   title: `Next.js and ${CMS_NAME} Example`,
@@ -41,6 +46,24 @@ function Footer() {
   );
 }
 
+// const Modal = ({
+//   context,
+//   id,
+//   innerProps
+// }: ContextModalProps<{
+//   item: Item;
+// }>) => {
+//   return (
+//     <div>
+//       <h1>{innerProps.item.name}</h1>
+//       <p>{innerProps.item.text}</p>
+//       <Button fullWidth mt="md" onClick={() => context.closeModal(id)}>
+//         Close modal
+//       </Button>
+//     </div>
+//   );
+// }
+
 export default function RootLayout({
   children,
 }: {
@@ -49,10 +72,14 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <body>
-        <section className="min-h-screen">
-          <main>{children}</main>
-          {/* <Footer /> */}
-        </section>
+      <MantineProvider theme={theme}>
+        <ModalsProvider>
+          <section className="min-h-screen">
+            <main>{children}</main>
+            {/* <Footer /> */}
+          </section>
+        </ModalsProvider>
+      </MantineProvider>
       </body>
     </html>
   );

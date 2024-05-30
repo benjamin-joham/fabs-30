@@ -1,0 +1,7 @@
+.test-page {
+  display: grid;
+  grid-template-columns: 300px;
+  &__title {
+    color: red;
+  }
+}

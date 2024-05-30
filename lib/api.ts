@@ -118,7 +118,7 @@ export async function getPostAndMorePosts(
     morePosts: extractPostEntries(entries),
   };
 }
-type Item = {
+export type Item = {
   name: string;
   year: string;
   text: string;

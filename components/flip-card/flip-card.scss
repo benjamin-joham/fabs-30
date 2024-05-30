@@ -1,0 +1,21 @@
+.flip-card {
+
+  &__modal-content {
+    height: 600px;
+  }
+
+  &__image {
+    display: flex;
+    max-height: 600px;
+    justify-content: center;
+  }
+}
+
+.react-card-flip {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  perspective: 1000px;
+}
