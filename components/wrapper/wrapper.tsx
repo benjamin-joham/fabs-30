@@ -56,16 +56,12 @@ export default function Wrapper ({ items }: Properties) {
     },
   });
 
-  // console.log('columns', columns)
-
   useEffect(() => {
-    // console.log('modal item changed', selectedItem)
     void markdownToHtml()
   }, [selectedItem])
 
   const handleFlipClick = () => {
     setIsFlipped(!isFlipped)
-    // console.log('clicked and flipped', isFlipped)
   }
 
   const markdownToHtml = async () => {
@@ -153,7 +149,6 @@ export default function Wrapper ({ items }: Properties) {
                   >
                     <Title order={2} className={b('title')}>{column.title}</Title>
                     <div className={b('posts-container', { active: snapshot.isDraggingOver })}>
-                      {/* {column.items.length} */}
                       {column.items.map((item, index) => (
                         <FlipCard
                         item={item}
@@ -163,7 +158,6 @@ export default function Wrapper ({ items }: Properties) {
                         setItem={setSelectedItem}
                         {...(columnId === 'backlog' && {className: 'initial'})}
                       />
-                        // <TaskCard key={item.name} item={item as Item} index={index} />
                       ))}
                     </div>
                     {provided.placeholder}
@@ -175,19 +169,7 @@ export default function Wrapper ({ items }: Properties) {
       </div>
     </DragDropContext>
     </div>
-    {/* {items.map((item, index) => {
-        // console.log('item', item)
-        return (
-          <FlipCard
-            item={item}
-            key={item.name}
-            index={index}
-            onClick={open}
-            setItem={setSelectedItem}
-          />
-        )
-      })} */}
-    <Modal opened={opened} onClose={onClose} size={"lg"} className={b('modal')}>
+    <Modal opened={opened} onClose={onClose} size={"xl"} className={b('modal')}>
       <ReactCardFlip isFlipped={isFlipped}>
           <div key="front">
             <div className={b('image')}>
@@ -198,7 +180,7 @@ export default function Wrapper ({ items }: Properties) {
                 }}
                 src={selectedItem?.image.url ?? ''}
                 alt={selectedItem?.image.title ?? ''}
-                // className={b('image')}
+                aspectRatio={1}
               />
             </div>
           </div>

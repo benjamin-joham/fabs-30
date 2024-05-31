@@ -6,8 +6,6 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
-  // width: 100%;
-  // min-height: 80vh;
 
   &__page-description {
     padding-inline: 20px;
@@ -29,11 +27,9 @@
 
     &:first-of-type {
       grid-column: 1 / 4;
-      // flex-direction: row;
 
       #{$this}__posts-container {
         flex-direction: row;
-        // margin-bottom: 10px;
       }
     }
   }
@@ -58,7 +54,6 @@
 
   &__information {
   height: 100%;
-  // text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -77,10 +72,13 @@
   }
 }
 
+.mantine-Modal-content {
+  height: 100%;
+}
+
 .mantine-Modal-body {
-  height: 600px !important;
+  height: 90% !important;
   display: flex;
-  // justify-self: center;
   flex-direction: column;
   justify-content: space-between;
 }

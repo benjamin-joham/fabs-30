@@ -36,8 +36,8 @@ export default function FlipCard({ item, onClick, setItem, index, className }: P
         ref={provided.innerRef}
         {...provided.draggableProps}
         {...provided.dragHandleProps}
-        className={className}
-      > 
+        className={b()}
+      >
         <CustomImage
           // className={className}
             key={item.name}
@@ -45,6 +45,7 @@ export default function FlipCard({ item, onClick, setItem, index, className }: P
             src={item.image.url}
             alt={item.image.title}
             onClick={handleOnClick}
+            aspectRatio={1}
           />
   </div>)}
     </Draggable>
