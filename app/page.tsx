@@ -6,6 +6,8 @@ import { Text, Title } from "@mantine/core";
 import './page.scss';
 import { fetchDatabaseData } from "@/actions/database.actions";
 
+export const dynamic = 'force-dynamic';
+
 export default async function HomePage() {
   const b = useBem('HomePage');
   // const allPosts = await getAllPosts(isEnabled);
