@@ -152,18 +152,20 @@ export default function Wrapper ({ items }: Properties) {
                     {...provided.droppableProps}
                   >
                     <Title order={2} className={b('title')}>{column.title}</Title>
-                    {/* {column.items.length} */}
-                    {column.items.map((item, index) => (
-                      <FlipCard
-                      item={item}
-                      key={item.name}
-                      index={index}
-                      onClick={open}
-                      setItem={setSelectedItem}
-                      {...(columnId === 'backlog' && {className: 'initial'})}
-                    />
-                      // <TaskCard key={item.name} item={item as Item} index={index} />
-                    ))}
+                    <div className={b('posts-container', { active: snapshot.isDraggingOver })}>
+                      {/* {column.items.length} */}
+                      {column.items.map((item, index) => (
+                        <FlipCard
+                        item={item}
+                        key={item.name}
+                        index={index}
+                        onClick={open}
+                        setItem={setSelectedItem}
+                        {...(columnId === 'backlog' && {className: 'initial'})}
+                      />
+                        // <TaskCard key={item.name} item={item as Item} index={index} />
+                      ))}
+                    </div>
                     {provided.placeholder}
                   </div>
                 )}

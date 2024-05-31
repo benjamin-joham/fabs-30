@@ -6,15 +6,21 @@ import './drawer.scss'
 import { useMutation } from '@tanstack/react-query';
 import { handleAction } from '@/utils/action.utils';
 import { fetchPosts } from '@/actions/contentful.action';
-import { resetDatabase } from '@/actions/database.actions';
+import { fetchDatabaseData, resetDatabase } from '@/actions/database.actions';
+import { useRouter } from 'next/navigation';
+
 
 export default function CustomDrawer() {
   const b = useBem('CustomDrawer')
   const [opened, { open, close }] = useDisclosure(false);
+  const router = useRouter();
 
   const fetchPostsMutation = useMutation({
     mutationFn: async () => {
       return handleAction(await fetchPosts());
+    },
+    onSuccess: async () => {
+      router.refresh();
     },
     onError: (error) => {
       console.log('error', error)
@@ -24,6 +30,9 @@ export default function CustomDrawer() {
   const resetDatabaseMutation = useMutation({
     mutationFn: async () => {
       return handleAction(await resetDatabase());
+    },
+    onSuccess: async () => {
+      router.refresh();
     },
     onError: (error) => {
       console.log('error', error)

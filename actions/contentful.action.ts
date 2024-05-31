@@ -4,7 +4,6 @@ import contentfulService from "@/services/contentful.service";
 import loggerService from "@/services/logger.service";
 import { createAction } from "@/utils/action.utils";
 import { prisma } from '@/lib/prisma';
-import { v4 as uuid } from 'uuid';
 
 const contentfulAction = createAction(error => loggerService.captureException(error, 'contentful.actions'));
 
@@ -22,18 +21,13 @@ export const fetchPosts = contentfulAction(async (): Promise<void> => {
       if (existingPosts.find(post => post.name === item.name)) {
         return;
       }
-      const imageId = uuid();
-      const postId = uuid();
 
-      await prisma.post.create({
+      const post = await prisma.post.create({
         data: {
           ...item,
           year: item.year.toString(),
-          id: postId,
-          imageId: undefined,
           image: {
             create: {
-              id: imageId,
               url: item.image.url,
               title: item.image.title
             }
@@ -41,7 +35,7 @@ export const fetchPosts = contentfulAction(async (): Promise<void> => {
           columnId: 'backlog'
         },
       })
-      updatedPosts.push(item);
+      updatedPosts.push(post);
     });
 
     loggerService.debug(`Fetched ${updatedPosts.length} new posts from Contentful`, 'contentful.actions');

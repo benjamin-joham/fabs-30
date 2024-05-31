@@ -44,6 +44,7 @@ export async function fetchGraphQL(query: string, preview = false): Promise<any>
         }`,
       },
       body: JSON.stringify({ query }),
+      cache: 'no-store'
       // next: { tags: ["posts"] },
     },
   ).then((response) => response.json());

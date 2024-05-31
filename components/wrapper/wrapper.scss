@@ -1,5 +1,7 @@
 .wrapper {
 
+  $this: &;
+
   margin: 8px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -27,7 +29,23 @@
 
     &:first-of-type {
       grid-column: 1 / 4;
-      flex-direction: row;
+      // flex-direction: row;
+
+      #{$this}__posts-container {
+        flex-direction: row;
+        // margin-bottom: 10px;
+      }
+    }
+  }
+
+  &__posts-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 200px;
+
+    &--active {
+      background-color: var(--mantine-color-grape-9);
     }
   }
 
