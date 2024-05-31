@@ -32,6 +32,7 @@ export const fetchPosts = contentfulAction(async (): Promise<void> => {
               title: item.image.title
             }
           },
+          imageId: undefined,
           columnId: 'backlog'
         },
       })
